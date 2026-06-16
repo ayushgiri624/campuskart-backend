@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema({
   image: { type: String },
   sellerName: { type: String },
   sellerEmail: { type: String },
+  sellerWhatsapp: { type: String },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Product", productSchema);
