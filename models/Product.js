@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema({
   sellerName: { type: String },
   sellerEmail: { type: String },
   sellerWhatsapp: { type: String },
+  sellerUid: { type: String },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Product", productSchema);
