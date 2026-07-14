@@ -2,25 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const Product = require("../models/Product");
+const validate = require("../middleware/validate");
+const { createProductSchema } = require("../schemas/productSchema");
 
 function isValidObjectId(id) {
   return mongoose.Types.ObjectId.isValid(id);
-}
-
-function validateProductInput(body) {
-  const errors = [];
-  if (!body.title || typeof body.title !== "string" || !body.title.trim()) {
-    errors.push("Title is required");
-  }
-  if (body.price === undefined || body.price === null || body.price === "") {
-    errors.push("Price is required");
-  } else if (isNaN(body.price) || Number(body.price) <= 0) {
-    errors.push("Price must be a positive number");
-  }
-  if (body.sellerEmail && !/^\S+@\S+\.\S+$/.test(body.sellerEmail)) {
-    errors.push("Seller email is invalid");
-  }
-  return errors;
 }
 
 router.get("/", async (req, res) => {
@@ -32,17 +18,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  const errors = validateProductInput(req.body);
-  if (errors.length > 0) {
-    return res.status(400).json({ error: errors.join(", ") });
-  }
+router.post("/", validate(createProductSchema), async (req, res) => {
   try {
     const product = new Product({
-      title: req.body.title.trim(),
-      description: req.body.description ? req.body.description.trim() : "",
-      price: Number(req.body.price),
-      category: req.body.category || "Other",
+      title: req.body.title,
+      description: req.body.description,
+      price: req.body.price,
+      category: req.body.category,
       image: req.body.image,
       sellerName: req.body.sellerName,
       sellerEmail: req.body.sellerEmail,

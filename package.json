@@ -7,10 +7,21 @@
     "dotenv": "^17.4.2",
     "express": "^4.22.2",
     "firebase": "^12.14.0",
+    "firebase-admin": "^14.1.0",
     "mongoose": "^8.24.0",
-    "socket.io": "^4.8.3"
+    "socket.io": "^4.8.3",
+    "zod": "^4.4.3"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest --runInBand"
+  },
+  "jest": {
+    "testMatch": ["**/__tests__/**/*.test.js"]
+  },
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "mongodb-memory-server": "^11.2.0",
+    "supertest": "^7.2.2"
   }
 }

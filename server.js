@@ -1,19 +1,15 @@
 const dns = require("dns");
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const mongoose = require("mongoose");
-const cors = require("cors");
 require("dotenv").config();
 
-const productRoutes = require("./routes/productRoutes");
-const conversationRoutes = require("./routes/conversationRoutes");
+const app = require("./app");
 const Message = require("./models/Message");
 const Conversation = require("./models/Conversation");
 
-const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -21,17 +17,7 @@ const io = new Server(server, {
   },
 });
 
-app.use(cors());
-app.use(express.json());
-
-app.use("/api/products", productRoutes);
-app.use("/api/conversations", conversationRoutes);
-
-app.get("/", (req, res) => {
-  res.send("CampusKart API is running!");
-});
-
-const onlineUsers = new Map(); // userUid -> Set of socket ids
+const onlineUsers = new Map();
 
 io.on("connection", (socket) => {
   console.log("Socket connected:", socket.id);
